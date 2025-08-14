@@ -173,7 +173,14 @@ class MathAlphaMask:
             elif wave_function == "triangle":
                 # Triangle wave between 0 and 1
                 raw = frequency * tau + phase / (2.0 * math.pi)
-                v = 2.0 * abs(2.0 * (raw - math.floor(raw + 0.5)))
+                # The previous implementation multiplied by 2 twice,
+                # producing values in the range [0, 2] which were then
+                # clamped to [0, 1].  This resulted in a flattened top
+                # rather than a proper triangular waveform.  The correct
+                # formula scales the absolute deviation from the nearest
+                # half‑integer by two, yielding a smooth wave that ramps
+                # from 0 to 1 and back to 0 over each period.
+                v = 2.0 * abs(raw - math.floor(raw + 0.5))
             elif wave_function == "sawtooth":
                 raw = frequency * tau + phase / (2.0 * math.pi)
                 v = raw % 1.0
@@ -208,8 +215,9 @@ class MathAlphaMask:
                 mask = 1.0 - mask
             masks.append(mask)
 
-        mask_tensor = torch.stack(masks, dim=0).to(samples)
-        return (mask_tensor, mask_tensor.unsqueeze(1).repeat(1, 3, 1, 1))
+        mask_tensor = torch.stack(masks, dim=0).to(device=device, dtype=torch.float32)
+        image_tensor = mask_tensor.unsqueeze(1).repeat(1, 3, 1, 1).to(dtype=samples.dtype)
+        return (mask_tensor, image_tensor)
 
 
 class FractalNoiseAlphaMask:
@@ -372,9 +380,9 @@ class FractalNoiseAlphaMask:
             if invert:
                 mask = 1.0 - mask
             masks.append(mask)
-        mask_tensor = torch.stack(masks, dim=0).to(samples)
+        mask_tensor = torch.stack(masks, dim=0).to(device=device, dtype=torch.float32)
         # Convert mask to RGB image by repeating across three channels
-        image_tensor = mask_tensor.unsqueeze(1).repeat(1, 3, 1, 1)
+        image_tensor = mask_tensor.unsqueeze(1).repeat(1, 3, 1, 1).to(dtype=samples.dtype)
         return (mask_tensor, image_tensor)
 
 
@@ -471,8 +479,8 @@ class VoronoiAlphaMask:
             if invert:
                 mask = 1.0 - mask
             masks.append(mask)
-        mask_tensor = torch.stack(masks, dim=0).to(samples)
-        image_tensor = mask_tensor.unsqueeze(1).repeat(1, 3, 1, 1)
+        mask_tensor = torch.stack(masks, dim=0).to(device=device, dtype=torch.float32)
+        image_tensor = mask_tensor.unsqueeze(1).repeat(1, 3, 1, 1).to(dtype=samples.dtype)
         return (mask_tensor, image_tensor)
 
 
@@ -546,8 +554,8 @@ class SierpinskiAlphaMask:
             if invert:
                 mask = 1.0 - mask
             masks.append(mask)
-        mask_tensor = torch.stack(masks, dim=0).to(samples)
-        image_tensor = mask_tensor.unsqueeze(1).repeat(1, 3, 1, 1)
+        mask_tensor = torch.stack(masks, dim=0).to(device=device, dtype=torch.float32)
+        image_tensor = mask_tensor.unsqueeze(1).repeat(1, 3, 1, 1).to(dtype=samples.dtype)
         return (mask_tensor, image_tensor)
 
 
@@ -688,8 +696,8 @@ class HarmonographAlphaMask:
             if invert:
                 mask = 1.0 - mask
             masks.append(mask)
-        mask_tensor = torch.stack(masks, dim=0).to(latent_samples)
-        image_tensor = mask_tensor.unsqueeze(1).repeat(1, 3, 1, 1)
+        mask_tensor = torch.stack(masks, dim=0).to(device=device, dtype=torch.float32)
+        image_tensor = mask_tensor.unsqueeze(1).repeat(1, 3, 1, 1).to(dtype=latent_samples.dtype)
         return (mask_tensor, image_tensor)
 
 
@@ -847,8 +855,8 @@ class AttractorAlphaMask:
             if invert:
                 mask = 1.0 - mask
             masks.append(mask)
-        mask_tensor = torch.stack(masks, dim=0).to(latent_samples)
-        image_tensor = mask_tensor.unsqueeze(1).repeat(1, 3, 1, 1)
+        mask_tensor = torch.stack(masks, dim=0).to(device=device, dtype=torch.float32)
+        image_tensor = mask_tensor.unsqueeze(1).repeat(1, 3, 1, 1).to(dtype=latent_samples.dtype)
         return (mask_tensor, image_tensor)
 
 
@@ -937,8 +945,8 @@ class QuasicrystalAlphaMask:
             if invert:
                 mask = 1.0 - mask
             masks.append(mask)
-        mask_tensor = torch.stack(masks, dim=0).to(samples)
-        image_tensor = mask_tensor.unsqueeze(1).repeat(1, 3, 1, 1)
+        mask_tensor = torch.stack(masks, dim=0).to(device=device, dtype=torch.float32)
+        image_tensor = mask_tensor.unsqueeze(1).repeat(1, 3, 1, 1).to(dtype=samples.dtype)
         return (mask_tensor, image_tensor)
 
 
@@ -1098,8 +1106,8 @@ class EquationAlphaMask:
             if invert:
                 mask = 1.0 - mask
             masks.append(mask)
-        mask_tensor = torch.stack(masks, dim=0).to(samples)
-        image_tensor = mask_tensor.unsqueeze(1).repeat(1, 3, 1, 1)
+        mask_tensor = torch.stack(masks, dim=0).to(device=device, dtype=torch.float32)
+        image_tensor = mask_tensor.unsqueeze(1).repeat(1, 3, 1, 1).to(dtype=samples.dtype)
         return (mask_tensor, image_tensor)
 
 
