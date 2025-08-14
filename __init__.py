@@ -20,7 +20,7 @@ NODE_CLASS_MAPPINGS = {
     "EquationAlphaMask": EquationAlphaMask,
 }
 
-NODE_DISPLAY_NAME_MAPPINGS = {
+NODE_DISPLAY_NAME_MAPPINGS = {␊
     "MathAlphaMask": "Crazy Math - Waveform Mask 🤯	",
     "FractalNoiseAlphaMask": "Crazy Math - Fractal Noise 🤯",
     "VoronoiAlphaMask": "Crazy Math - Voronoi 🤯",
@@ -31,4 +31,11 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "EquationAlphaMask": "Crazy Math - Equation 🤯",
 }
 
+# Expose a web directory so ComfyUI loads the custom front-end assets
+WEB_DIRECTORY = "./web"
 
+__all__ = [
+    "NODE_CLASS_MAPPINGS",
+    "NODE_DISPLAY_NAME_MAPPINGS",
+    "WEB_DIRECTORY",
+]
