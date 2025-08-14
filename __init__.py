@@ -20,7 +20,7 @@ NODE_CLASS_MAPPINGS = {
     "EquationAlphaMask": EquationAlphaMask,
 }
 
-NODE_DISPLAY_NAME_MAPPINGS = {␊
+NODE_DISPLAY_NAME_MAPPINGS = {
     "MathAlphaMask": "Crazy Math - Waveform Mask 🤯	",
     "FractalNoiseAlphaMask": "Crazy Math - Fractal Noise 🤯",
     "VoronoiAlphaMask": "Crazy Math - Voronoi 🤯",
@@ -39,3 +39,4 @@ __all__ = [
     "NODE_DISPLAY_NAME_MAPPINGS",
     "WEB_DIRECTORY",
 ]
+
