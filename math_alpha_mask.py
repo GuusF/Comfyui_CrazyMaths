@@ -173,7 +173,14 @@ class MathAlphaMask:
             elif wave_function == "triangle":
                 # Triangle wave between 0 and 1
                 raw = frequency * tau + phase / (2.0 * math.pi)
-                v = 2.0 * abs(2.0 * (raw - math.floor(raw + 0.5)))
+                # The previous implementation multiplied by 2 twice,
+                # producing values in the range [0, 2] which were then
+                # clamped to [0, 1].  This resulted in a flattened top
+                # rather than a proper triangular waveform.  The correct
+                # formula scales the absolute deviation from the nearest
+                # half‑integer by two, yielding a smooth wave that ramps
+                # from 0 to 1 and back to 0 over each period.
+                v = 2.0 * abs(raw - math.floor(raw + 0.5))
             elif wave_function == "sawtooth":
                 raw = frequency * tau + phase / (2.0 * math.pi)
                 v = raw % 1.0
